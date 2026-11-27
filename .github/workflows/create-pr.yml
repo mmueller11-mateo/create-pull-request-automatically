@@ -1,0 +1,28 @@
+name: Create PR demo
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Generate file
+        run: |
+          mkdir -p generated
+          echo "Generated at $(date -u +'%Y-%m-%d %H:%M:%S') UTC" > generated/timestamp.txt
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: automated/update-timestamp
+          commit-message: "chore: update generated timestamp"
+          title: "chore: update generated timestamp"
+          body: "Automatically created by the create-pull-request action."
+          delete-branch: true
